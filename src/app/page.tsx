@@ -15,7 +15,6 @@ export default function Home() {
   const [inputValues, setInputValues] = useState<{ [key: number]: string }>({});
   const colors = ["green", "red", "blue"];
 
-  // This useEffect runs only on the client side to retrieve todos from localStorage
   useEffect(() => {
     if (typeof window !== "undefined") {
       const savedTodos = localStorage.getItem("todos");
@@ -26,7 +25,6 @@ export default function Home() {
     }
   }, []);
 
-  // Update localStorage whenever todos change
   useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem("todos", JSON.stringify(todos));
