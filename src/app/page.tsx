@@ -10,24 +10,27 @@ interface Todo {
 }
 
 export default function Home() {
-  const [todos, setTodos] = useState<Todo[]>(() => {
-    const savedTodos = localStorage.getItem("todos");
-    return savedTodos ? JSON.parse(savedTodos) : [];
-  });
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [show, setShow] = useState<boolean>(false);
   const [inputValues, setInputValues] = useState<{ [key: number]: string }>({});
   const colors = ["green", "red", "blue"];
 
+  // This useEffect runs only on the client side to retrieve todos from localStorage
   useEffect(() => {
-    const res = localStorage.getItem("todos");
-    if (res) {
-      const arr: Todo[] = JSON.parse(res);
-      setTodos(arr);
+    if (typeof window !== "undefined") {
+      const savedTodos = localStorage.getItem("todos");
+      if (savedTodos) {
+        const arr: Todo[] = JSON.parse(savedTodos);
+        setTodos(arr);
+      }
     }
   }, []);
 
+  // Update localStorage whenever todos change
   useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("todos", JSON.stringify(todos));
+    }
   }, [todos]);
 
   const handleChange = (
